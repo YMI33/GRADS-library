@@ -13,6 +13,11 @@ mon.10=Oct
 mon.11=Nov
 mon.12=Dec
 
+*climatology
+'set t 1 12'
+'define sstclim = ave(sst, t+0, t=600, 12)'
+'modify sstclim seasonal'
+
 *output X-Y coordinate information
 'q dim'
 lin0=sublin(result,2)
