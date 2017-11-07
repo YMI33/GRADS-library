@@ -1,0 +1,231 @@
+'reinit'
+*constant
+mon.1=Jan
+mon.2=Feb
+mon.3=Mar
+mon.4=Apr
+mon.5=May
+mon.6=Jun
+mon.7=Jul
+mon.8=Aug
+mon.9=Sep
+mon.10=Oct
+mon.11=Nov
+mon.12=Dec
+
+lev.1=850
+lev.2=500
+lev.3=200
+
+var.1=hgt
+var.2=uwnd
+var.3=vwnd
+var.4=tmp
+var.5=omega
+var.6=rain
+
+flag.1=p
+flag.2=n
+
+sig.1=2.0227
+*sig.1=2
+sig.2=2.0181
+
+clevs.1='1460 1480 1500 1520 1530 1540'
+clevs.2='5640 5720 5800 5840 5860 5870 5880'
+clevs.3='11950 12150 12350 12450 12500 12550'
+
+pposition.1='0.7 4 8 10.5'
+pposition.3='0.7 4 4.85 7.35'
+pposition.5='0.7 4 1.2 3.7'
+pposition.2='4.7 8 8 10.5'
+pposition.4='4.7 8 4.85 7.35'
+pposition.6='4.7 8 1.2 3.7'
+
+alpha.1='(a)'
+alpha.2='(b)'
+alpha.3='(c)'
+alpha.4='(d)'
+alpha.5='(e)'
+alpha.6='(f)'
+
+i=1
+while(i<=6)
+ 'open F:\postpaper\PJ\Q12PJ\gradsdata\summercompoQ1_'var.i'_p.ctl'
+ i=i+1
+endwhile
+
+
+
+'set t '3
+'set lat -20 60'
+'set lon 40 180'
+
+
+*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*+++++++++++++++++++++++++++++++++++++合成分析部分+++++++++++++++++++++++++++++++++++++++++++++
+*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+'c'
+posnum=1
+j=1
+while(j<=2)
+'set lev 'lev.j
+i=1
+
+while(i<=2)
+*------------------------------axis configure-----------------------------------------------------
+'set parea 'pposition.posnum 
+'set xlint 40'
+'set ylint 15'
+*'set ylevs 1000 850 700 600 500 400 300 200'
+'set xlopts 1 5 0.15'
+'set ylopts 1 5 0.15'
+'set map 1 1 1'
+'set grads off'
+'set timelab off'
+'set grid off'
+'set font 4'
+
+*------------------------------draw shaded-----------------------------------------------------
+ 'set gxout shaded'
+'bluered1'
+ 'set rbrange -0.06 0.06'
+ 'set black -0.01 0.01'
+ 'set cint 0.01'
+* 'd abs(rain_'flag.i'.6(z=1)-rain_mean.6(z=1))/rain_Q1_std_'flag.i'.6(z=1)-'sig.i''
+* 'd smth9(maskout(omega_'flag.i'.5-omega_mean.5,abs(omega_Q1_std_'flag.i'.5)-'sig.i'))'
+ 'd smth9(omega_'flag.i'.5-omega_mean.5)'
+if posnum=3
+ 'cbarn 1 0 4.25 4.3'
+endif
+*------------------------------draw contour-----------------------------------------------------
+ 'set gxout contour'
+ 'set ccolor 1'
+ 'set clevs 'clevs.j
+ 'd smth9(hgt_'flag.i'.1)'
+*-------------------------------draw point----------------------------
+ 'define sig=skip(maskout(hgt_'flag.i',hgt_Q1_std_'flag.i'.1-'sig.i'),2,2)'
+ 'set gxout shp'
+ 'set shp -pt F:\postpaper\PJ\Q12PJ\gradsdata\sig_shp.shp'
+ 'd sig'
+  'set shpopts 15 1 0.05'
+  'set line 3'
+ 'draw shp F:\postpaper\PJ\Q12PJ\gradsdata\sig_shp.shp'
+ 'define sig=skip(maskout(hgt_'flag.i',-hgt_Q1_std_'flag.i'.1-'sig.i'),2,2)'
+ 'set gxout shp'
+ 'set shp -pt F:\postpaper\PJ\Q12PJ\gradsdata\sig_shp.shp'
+ 'd sig'
+  'set shpopts 15 4 0.05'
+  'set line 3'
+ 'draw shp F:\postpaper\PJ\Q12PJ\gradsdata\sig_shp.shp'
+*------------------------------draw vector-----------------------------------------------------
+  'set gxout barb'
+  'set digsiz 0.05'
+  'set cthick 5'
+  'set ccolor 1'
+*if lev.j=500
+  'define u=maskout(uwnd_'flag.i'.2-uwnd_mean.2,abs(uwnd_Q1_std_'flag.i'.2)-'sig.i')'
+  'define v=maskout(vwnd_'flag.i'.3-vwnd_mean.3,abs(vwnd_Q1_std_'flag.i'.3)-'sig.i')'
+*endif
+*if lev.j=850
+*  'define u=maskout(uwnd_'flag.i'.2-uwnd_mean.2,abs(uwnd_'flag.i'.2-uwnd_mean.2)-1)'
+*  'define v=maskout(vwnd_'flag.i'.3-vwnd_mean.3,abs(vwnd_'flag.i'.3-vwnd_mean.3)-1)'
+*endif
+
+  'd 2.5*skip(u,8,3);2.5*skip(vwnd_'flag.i'.3-vwnd_mean.3,8,3)'
+  'set digsiz 0.05'
+  'set cthick 5'
+  'set ccolor 1'
+  'd 2.5*skip(uwnd_'flag.i'.2-uwnd_mean.2,8,3);2.5*skip(v,8,3)'
+
+*---------------------------------------------------------------------------------------------
+
+'set shpopts -1 2 0.01'
+'set line 1 1 1'
+'draw shp G:/TPbound/TP.shp'
+  if lev.j=850
+   'tibetan 850 1'
+  endif
+
+
+  'q w2xy 16 75' 
+  x1 = subwrd(result,3)
+  y1 = subwrd(result,6)
+  'set string 1 tl 5 0'
+  'set strsiz 0.18'
+  'draw string 'x1' 'y1' 'alpha.posnum
+
+*'d dz.2(t=1)'
+ posnum=posnum+1
+ i=i+1
+endwhile
+
+
+j=j+1
+endwhile
+
+*-----------------------------------------------200hPa-------------------------------------------
+'set lev 200'
+i=1
+
+while(i<=2)
+*------------------------------axis configure-----------------------------------------------------
+'set parea 'pposition.posnum 
+'set xlint 40'
+'set ylint 15'
+*'set ylevs 1000 850 700 600 500 400 300 200'
+'set xlopts 1 5 0.15'
+'set ylopts 1 5 0.15'
+'set grads off'
+'set timelab off'
+'set grid off'
+'set font 4'
+'set map 1 1 1'
+
+*------------------------------draw shaded-----------------------------------------------------
+ 'set gxout shaded'
+'bluered1'
+ 'set rbrange -10 10'
+ 'set black -2 2'
+* 'set cint 0.01'
+* 'd abs(rain_'flag.i'.6(z=1)-rain_mean.6(z=1))/rain_Q1_std_'flag.i'.6(z=1)-'sig.i''
+* 'd smth9(maskout(omega_'flag.i'.5-omega_mean.5,abs(omega_Q1_std_'flag.i'.5)-'sig.i'))'
+ 'd smth9(uwnd_'flag.i'.2-uwnd_mean.2)'
+
+*------------------------------draw vector-----------------------------------------------------
+  'set gxout stream'
+  'set digsiz 0.05'
+  'set cthick 5'
+  'set ccolor 1'
+  'set strmden -5'
+*  'define u=maskout(uwnd_'flag.i'.2-uwnd_mean.2,abs(uwnd_Q1_std_'flag.i'.2)-'sig.i')'
+*  'define v=maskout(vwnd_'flag.i'.3-vwnd_mean.3,abs(vwnd_Q1_std_'flag.i'.3)-'sig.i')'
+  'd uwnd_'flag.i'.2;vwnd_'flag.i'.3'
+*---------------------------------------------------------------------------------------------
+
+  if lev.j=850
+   'tibetan 850 1'
+  endif
+'set line 1 1 1'
+'draw shp G:/TPbound/TP.shp'
+if posnum=5
+ 'cbarn 1 0 4 0.7'
+endif
+
+  'q w2xy 16 75' 
+  x1 = subwrd(result,3)
+  y1 = subwrd(result,6)
+  'set string 1 tl 5 0'
+  'set strsiz 0.18'
+  'draw string 'x1' 'y1' 'alpha.posnum
+
+*'d dz.2(t=1)'
+ posnum=posnum+1
+ i=i+1
+endwhile
+
+
+j=j+1
+
+
+'gxprint F:\postpaper\PJ\picture\zprofile\composite_Q1_33year.eps white'
