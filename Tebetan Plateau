@@ -1,4 +1,7 @@
 *高原2000m高度线
 'draw shp G:\TPbound\TP.shp'
 
-*
+*平面图遮蔽地形区域
+  if lev.j=850
+   'tibetan 850 1'
+  endif
