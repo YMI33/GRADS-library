@@ -12,3 +12,21 @@ mon.9=Sep
 mon.10=Oct
 mon.11=Nov
 mon.12=Dec
+
+*output X-Y coordinate information
+'q dim'
+lin0=sublin(result,2)
+lin1=sublin(result,3)
+X1=subwrd(lin0,11)
+X2=subwrd(lin0,13)
+lon1=subwrd(lin0,6)
+lon2=subwrd(lin0,8)
+
+Y1=subwrd(lin1,11)
+Y2=subwrd(lin1,13)
+lat1=subwrd(lin1,6)
+lat2=subwrd(lin1,8)
+
+res=write('F:\postpaper\PJ\imformation.txt',X1' 'X2' 'Y1' 'Y2)
+res=write('F:\postpaper\PJ\imformation.txt',' 'lon1' 'lon2' 'lat1' 'lat2)
+res=close('F:\postpaper\PJ\imformation.txt')
