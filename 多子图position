@@ -1,0 +1,34 @@
+*6子图
+
+pposition.1='0.7 4 8 10.5'
+pposition.3='0.7 4 4.85 7.35'
+pposition.5='0.7 4 1.2 3.7'
+pposition.2='4.7 8 8 10.5'
+pposition.4='4.7 8 4.85 7.35'
+pposition.6='4.7 8 1.2 3.7'
+
+alpha.1='(a)'
+alpha.2='(b)'
+alpha.3='(c)'
+alpha.4='(d)'
+alpha.5='(e)'
+alpha.6='(f)'
+
+posnum=1
+
+'q w2xy 16 75' 
+x1 = subwrd(result,3)
+y1 = subwrd(result,6)
+'set string 1 tl 5 0'
+'set strsiz 0.18'
+'draw string 'x1' 'y1' 'alpha.posnum
+  
+*4子图
+  
+pposition.1='0.5 5.5 4.5 8.5'
+pposition.2='5.5 10.5 4.5 8.5'
+pposition.3='0.5 5.5 0.5 4.5'
+pposition.4='5.5 10.5 0.5 4.5'
+
+*3子图
+
