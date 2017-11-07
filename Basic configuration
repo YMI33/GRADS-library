@@ -1,0 +1,14 @@
+*preset time variable
+'reinit'
+mon.1=Jan
+mon.2=Feb
+mon.3=Mar
+mon.4=Apr
+mon.5=May
+mon.6=Jun
+mon.7=Jul
+mon.8=Aug
+mon.9=Sep
+mon.10=Oct
+mon.11=Nov
+mon.12=Dec
