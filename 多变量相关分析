@@ -1,0 +1,116 @@
+'reinit'
+*定义常量
+mon.1=Jan
+mon.2=Feb
+mon.3=Mar
+mon.4=Apr
+mon.5=May
+mon.6=Jun
+mon.7=Jul
+mon.8=Aug
+mon.9=Sep
+mon.10=Oct
+mon.11=Nov
+mon.12=Dec
+monind=8
+
+*打开数据
+'open F:\postpaper\PJ\Q12PJ\gradsdata\tpq1'monind'index.ctl'
+'open F:\postpaper\PJ\Q12PJ\gradsdata\phil'monind'index.ctl'
+'sdfopen G:\JRA55\uwnd.mon.mean.nc'
+'sdfopen G:\JRA55\vwnd.mon.mean.nc'
+'sdfopen G:\JRA55\omega.mon.mean.nc'
+'open G:\TPbound\dz.ctl'
+'sdfopen G:\JRA55\hgt.mon.mean.nc'
+'sdfopen G:\JRA55\tmp.mon.mean.nc'
+'open G:\Q1\Q1.ctl'
+'sdfopen G:\GPCPdata\precip.mon.mean.nc'
+'sdfopen G:\HadISST\HadISST_sst.nc'
+'open G:\JRA55\jra55_hgt_monthly_std.ctl'
+
+lev.1=850
+lev.2=500
+lev.3=200
+lev.4=400
+lev.5=100
+lev.6=700
+lev.7=350
+index.1=tp
+index.2=phil
+k=1
+'set time 'mon.monind'1981 'mon.monind'2013'
+'define tp=tpq1.1'
+'define phil=philq1.2'
+
+'set time aug1981'
+'set lat -60 60'
+'set lon 40 160'
+*坐标轴及相关设置
+*'set zlog on'
+
+j=1
+while(j<=1)
+'set lev 500'
+while(k<=1)
+'define w'k'=tcorr('index.k',omega.5,t+0,t+32)'
+'define u'k'=tcorr('index.k',uwnd.3,t+0,t+32)'
+'define v'k'=tcorr('index.k',vwnd.4,t+0,t+32)'
+'define z'k'=tcorr('index.k',hgt.7,t+0,t+32)'
+'define tmp'k'=tcorr('index.k',tmp.8,t+0,t+32)'
+'define q1'k'=tcorr('index.k',q1.9(z=1),t+0,t+32)'
+'define dz'k'=tcorr('index.k',hgt.12,t+0,t+32)'
+'define dw'k'=tcorr('index.k',omega.5(z-1)-omega.5(z+1),t+0,t+32)'
+k=k+1
+endwhile
+*------------------------------axis configure-----------------------------------------------------
+'c'
+'set xlint 20'
+'set xlopts 1 5 0.22'
+'set ylopts 1 5 0.22'
+'set grads off'
+'set timelab off'
+'set grid off'
+'set font 4'
+
+*------------------------------draw shaded-----------------------------------------------------
+'set gxout shaded'
+'bluered1'
+'set black -.3 .3'
+'d dz1'
+ 'cbarn'
+
+
+*------------------------------draw contour-----------------------------------------------------
+
+ 'set gxout contour'
+ 'set cmax 1'
+ 'set cmin -1'
+ 'set black -.3.5 .3.5'
+ 'set cint .1'
+ 'd tmp1'
+*------------------------------draw vector-----------------------------------------------------
+  len=0.4
+  scale=1
+  xrit=8
+  ybot=0.35
+  'set gxout vector'
+  'set arrscl 'len' 'scale
+  'set arrlab off'
+  'set cthick 5'
+  'set ccolor 1'
+*  'd maskout(skip(u1,2,2),skip(u1,2,2)-0.4);skip(v1,2,2)'
+*  'd skip(u1,2,2);maskout(skip(v1,2,2),skip(v1,2,2)-0.4)'
+*---------------------------------------------------------------------------------------------
+
+'draw shp G:/TPbound/TP.shp'
+return
+  if lev.j=850
+   'tibetan 850 1'
+  endif
+'draw shp G:/TPbound/TP.shp'
+*'d dz.2(t=1)'
+*'gxprint F:\postpaper\PJ\picture\zprofile\2Dprofile_'index.k''lev.j'.png x2400 y1350 white'
+*'gxprint F:\postpaper\PJ\picture\zprofile\2Dprofile_'index.k''lev.j'.eps white'
+j=j+1
+endwhile
+
