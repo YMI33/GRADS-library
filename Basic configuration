@@ -48,3 +48,7 @@ lat2=subwrd(lin1,8)
 res=write('F:\postpaper\PJ\imformation.txt',X1' 'X2' 'Y1' 'Y2)
 res=write('F:\postpaper\PJ\imformation.txt',' 'lon1' 'lon2' 'lat1' 'lat2)
 res=close('F:\postpaper\PJ\imformation.txt')
+
+*constant
+a=6.37e6
+omg_earth=7.27e-5
